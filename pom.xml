@@ -12,6 +12,7 @@
 
   <properties>
     <vertx.version>3.1.0</vertx.version>
+    <docker.skip>false</docker.skip>
 
     <!-- must be set in each sub-project -->
     <main.verticle/>
@@ -21,9 +22,10 @@
     <module>data-provisioning</module>
     <module>data-storage-service</module>
     <module>data-storage-client</module>
-    <module>eventbus-to-hawkular-bridge</module>
-    <module>map-render</module>
+    <module>map-render-service</module>
+
     <module>map-server</module>
+    <module>eventbus-to-hawkular-bridge</module>
   </modules>
 
   <dependencyManagement>
@@ -92,6 +94,7 @@
           <artifactId>docker-maven-plugin</artifactId>
           <version>0.13.6</version>
           <configuration>
+            <skip>${docker.skip}</skip>
             <images>
               <image>
                 <name>vertx-devoxx/${project.artifactId}:${project.version}</name>
@@ -112,7 +115,7 @@
                   <assembly>
                     <mode>dir</mode>
                     <basedir>/opt/vertx</basedir>
-                    <descriptor>${project.basedir}/src/main/docker/assembly.xml</descriptor>
+                    <descriptor>${project.parent.basedir}/docker-assembly/assembly.xml</descriptor>
                   </assembly>
                 </build>
               </image>

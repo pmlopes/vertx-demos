@@ -1,7 +1,7 @@
 package io.vertx.devoxx.data.provisioning;
 
+import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -16,26 +16,16 @@ import java.util.Map;
 /**
  * @author <a href="http://escoffier.me">Clement Escoffier</a>
  */
-public class MapMeProvisioning {
+public class MapMeProvisioning extends AbstractVerticle {
 
-  private final Vertx vertx;
-  private final String mongoURL;
+  private String mongoURL;
 
-  public static void main(String[] args) {
-    if (args.length > 1) {
-      System.err.println("Only one argument expected (the mongo connection string)");
-    }
-    if (args.length == 0) {
-      new MapMeProvisioning("mongodb://localhost:27017").provision();
-    } else {
-      new MapMeProvisioning(args[0]).provision();
-    }
+  @Override
+  public void start() {
+    mongoURL = config().getString("mongoURL");
+    provision();
   }
 
-  public MapMeProvisioning(String url) {
-    vertx = Vertx.vertx();
-    mongoURL = url;
-  }
 
   private void provision() {
     HttpClient client = vertx.createHttpClient();
@@ -67,7 +57,6 @@ public class MapMeProvisioning {
     Map<String, Place> placesByName = new HashMap<>();
     JsonObject categories = json.getJsonObject("categories");
     categories.stream().forEach(entry -> {
-      System.out.println("New category: " + entry.getKey());
       String category = entry.getKey();
       JsonObject cat = (JsonObject) entry.getValue();
       JsonObject tags = cat.getJsonObject("tags");

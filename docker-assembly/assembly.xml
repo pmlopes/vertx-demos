@@ -7,11 +7,16 @@
       <outputDirectory>.</outputDirectory>
       <destName>vertx-service-fat.jar</destName>
     </file>
-    <!--<file>-->
-      <!--<source>target/classes/config.json</source>-->
-      <!--<outputDirectory>.</outputDirectory>-->
-      <!--<destName>config.json</destName>-->
-    <!--</file>-->
   </files>
+
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}/src/main/docker</directory>
+      <includes>
+        <include>*.json</include>
+      </includes>
+      <outputDirectory>.</outputDirectory>
+    </fileSet>
+  </fileSets>
 
 </assembly>
