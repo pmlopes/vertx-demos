@@ -96,6 +96,10 @@ mvn clean package docker:build
 == Execution
 
 ```
-docker run 
+docker run -d vertx-devoxx/map-server
+```
+  
+  
+TODO : monitoring...  
 
 
