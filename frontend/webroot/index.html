@@ -11,7 +11,7 @@
   <!--[if lt IE 9]>
   <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
   <script src="//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
   <script src="js/vertx-eventbus.js"></script>
@@ -43,7 +43,7 @@
 
       <h2>Points of Interest</h2>
       <!-- item list -->
-      <div ng-repeat="poi in pois | filter:query">
+      <div ng-repeat="poi in pois | filter:query | orderBy:'-thumbs'">
         <div class="panel panel-default">
           <div class="panel-heading">
             <a href="#" ng-click="showInMap(poi)">{{poi.companyName}}</a>
@@ -56,8 +56,8 @@
         <br/>
         <p>{{poi.description}}</p>
         <h4>Recommend:</h4>
-        <a href="#"><span class="glyphicon glyphicon-thumbs-up"></span> <span class="badge">{{}}</span></a><br />
-        <a href="#"><span class="glyphicon glyphicon-thumbs-down"> </span> <span class="badge">{{}}</span></a>
+        <a href="#" ng-click="thumbs(poi, true)"><span class="glyphicon glyphicon-thumbs-up"></span> <span class="badge">{{poi.thumbsUp}}</span></a><br />
+        <a href="#" ng-click="thumbs(poi, false)"><span class="glyphicon glyphicon-thumbs-down"> </span> <span class="badge">{{poi.thumbsDown}}</span></a>
         <hr>
       </div>
     </div>

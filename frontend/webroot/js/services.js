@@ -12,22 +12,20 @@ app.factory('eventBus', function ($rootScope) {
   return {
     open: function (callback) {
       eb = new EventBus(window.location.protocol + '//' + window.location.host + '/eventbus');
-      eb.onopen(function () {
+      eb.onopen = function () {
         var args = arguments;
         $rootScope.$apply(function () {
           if (callback) {
             callback.apply(eb, args);
           }
         });
-      });
+      };
     },
     send: function (address, message, headers, callback) {
-      eb.send(address, message, headers, function () {
+      eb.send(address, message, headers, callback && function () {
         var args = arguments;
         $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(eb, args);
-          }
+          callback.apply(eb, args);
         });
       });
     },
@@ -35,32 +33,28 @@ app.factory('eventBus', function ($rootScope) {
       eb.send(address, message, headers);
     },
     onerror: function (callback) {
-      eb.onerror(function () {
+      eb.onerror = function () {
         var args = arguments;
         $rootScope.$apply(function () {
           if (callback) {
             callback.apply(eb, args);
           }
         });
-      });
+      };
     },
-    registerHandler: function (callback) {
-      eb.registerHandler(function () {
+    registerHandler: function (address, headers, callback) {
+      eb.registerHandler(address, headers, callback && function () {
         var args = arguments;
         $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(eb, args);
-          }
+          callback.apply(eb, args);
         });
       });
     },
-    unregisterHandler: function (callback) {
-      eb.unregisterHandler(function () {
+    unregisterHandler: function (adress, headers, callback) {
+      eb.unregisterHandler(address, headers, callback && function () {
         var args = arguments;
         $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(eb, args);
-          }
+          callback.apply(eb, args);
         });
       });
     },
