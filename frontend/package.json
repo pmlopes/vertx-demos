@@ -1,0 +1,14 @@
+{
+  "name": "map-frontend",
+  "version": "1.0.0",
+  "description": "The Web Frontend to our map demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "vertx run server.js"
+  },
+  "dependencies": {
+    "vertx3-full": "3.1.0"
+  },
+  "author": "Paulo Lopes <plopes@redhat.com>",
+  "license": "ISC"
+}
