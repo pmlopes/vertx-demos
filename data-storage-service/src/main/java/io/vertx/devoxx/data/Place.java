@@ -6,7 +6,10 @@ import io.vertx.core.json.JsonObject;
 import java.util.*;
 
 /**
- * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * The place structure.
+ *
+ * It's a data object that can be serialized to JSON (and built from JSON). Data objects can be used in event bus
+ * proxies.
  */
 @DataObject(generateConverter = true)
 public class Place {

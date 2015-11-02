@@ -10,7 +10,8 @@ import io.vertx.serviceproxy.ProxyHelper;
 import java.util.List;
 
 /**
- * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * Service exposed on the event bus to provide access to
+ * the stored Places.
  */
 @VertxGen
 @ProxyGen
@@ -27,6 +28,4 @@ public interface DataStorageService {
   void getPlacesForTag(String tag, Handler<AsyncResult<List<Place>>> resultHandler);
 
   void addPlace(Place place, Handler<AsyncResult<Void>> resultHandler);
-
-
 }
