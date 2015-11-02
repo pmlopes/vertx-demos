@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Map Tile Server Micro-Service
+ *
  * @author Paulo Lopes
  */
 public class MapServerVerticle extends AbstractVerticle {
@@ -38,8 +39,6 @@ public class MapServerVerticle extends AbstractVerticle {
 
     final int port = config().getInteger("port", 8000);
     final int cache = config().getInteger("cache", 86400);
-
-    final EventBus eb = vertx.eventBus();
 
     vertx.createHttpServer().requestHandler(req -> {
       if (req.method() == HttpMethod.GET) {
@@ -64,24 +63,21 @@ public class MapServerVerticle extends AbstractVerticle {
                 .end();
 
           } else {
-
-            DeliveryOptions options = new DeliveryOptions()
-                .addHeader("z", z)
-                .addHeader("x", x)
-                .addHeader("y", y);
-
-            eb.<Buffer>send("map-render", null, options, res -> {
-              if (res.succeeded()) {
-                req.response()
-                    .putHeader("last-modified", ISODATE.format(new Date()))
-                    .putHeader("content-type", "image/png")
-                    .end(res.result().body());
-              } else {
-                req.response().setStatusCode(500).end(res.cause().getMessage());
-              }
-            });
+            vertx.createHttpClient().getNow(80, "map0render0service-vertxdemos.rhcloud.com",
+                "/render/" + x + "/y/" + z, response -> {
+                  if (response.statusCode() == 200) {
+                    response.bodyHandler(buffer -> {
+                          req.response()
+                              .putHeader("last-modified", ISODATE.format(new Date()))
+                              .putHeader("content-type", "image/png")
+                              .end(buffer);
+                        }
+                    );
+                  } else {
+                    req.response().setStatusCode(500).end("Cannot retrieve map tile");
+                  }
+                });
           }
-
           return;
         }
       }
