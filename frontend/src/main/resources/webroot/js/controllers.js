@@ -33,10 +33,10 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
       // load recommendations
       data.forEach(function (el) {
         $scope.pois.push(el);
-        eventBus.send('poi.recommendation.load', {_id: el._id}, {}, function (err, msg) {
+        eventBus.send('poi.recommendation.load', {_id: el.name}, {}, function (err, msg) {
           if (!err) {
             $scope.pois.filter(function (val) {
-              return val._id === msg.body._id;
+              return val.name === msg.body._id;
             }).forEach(function (el) {
               el.thumbsUp = msg.body.up || el.thumbsUp;
               el.thumbsDown = msg.body.down || el.thumbsDown;
@@ -49,7 +49,7 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
       eventBus.registerHandler('poi.recommendation', {}, function (err, msg) {
         if (!err) {
           $scope.pois.filter(function (val) {
-            return val._id === msg.body._id;
+            return val.name === msg.body._id;
           }).forEach(function (el) {
             el.thumbsUp = msg.body.up || el.thumbsUp;
             el.thumbsDown = msg.body.down || el.thumbsDown;
@@ -73,6 +73,6 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   };
 
   $scope.thumbs = function (poi, up) {
-    eventBus.send('poi.recommendation.vote', {_id: poi._id, thumbs: up});
+    eventBus.send('poi.recommendation.vote', {_id: poi.name, thumbs: up});
   };
 });
