@@ -2,7 +2,7 @@ var RedisClient = require('vertx-redis-js/redis_client');
 var Router = require('vertx-web-js/router');
 var SockJSHandler = require('vertx-web-js/sock_js_handler');
 var StaticHandler = require('vertx-web-js/static_handler');
-var DataStorageService = require('devoxx-workshop-js/data_storage_service-proxy');
+var DataStorageService = require('devoxx-workshop-js/data_storage_service');
 
 // the event bus
 var eb = vertx.eventBus();
@@ -13,7 +13,7 @@ var router = Router.router(vertx);
 // create a redis connection
 var redis = RedisClient.create(vertx, {host: 'localhost'});
 
-var store = new DataStorageService(eb, 'devoxx.places');
+var store = DataStorageService.createProxy(vertx, 'devoxx.places');
 
 // Allow events for the designated addresses in/out of the event bus bridge
 var opts = {
@@ -61,12 +61,11 @@ router.route('/eventbus/*').handler(SockJSHandler.create(vertx).bridge(opts).han
 
 // handle request to places
 router.get('/places').handler(function (ctx) {
-  store.getAllPlaces(function (err, res) {
-
+  store.getAllPlaces(function (res, err) {
     if (err) {
       ctx.fail(err);
     } else {
-      ctx.response().contentType('application/json').end(res);
+      ctx.response().putHeader('Content-Type', 'application/json').end(JSON.stringify(res));
     }
   })
 });

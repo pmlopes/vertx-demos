@@ -46,7 +46,7 @@
       <div ng-repeat="poi in pois | filter:query | orderBy:'-thumbs'">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <a href="#" ng-click="showInMap(poi)"><span class="label label-info">{{poi.category}}</span>: {{poi.name}}</a>
+            <a href="#" ng-click="showInMap(poi)">{{poi.name}}</a>
           </div>
         </div>
         <span ng-repeat="tag in poi.tags">
