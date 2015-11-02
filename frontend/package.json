@@ -2,9 +2,9 @@
   "name": "map-frontend",
   "version": "1.0.0",
   "description": "The Web Frontend to our map demo",
-  "main": "server.js",
+  "main": "src/main/resources/server.js",
   "scripts": {
-    "start": "vertx run server.js"
+    "start": "cd src/main/resources && vertx run server.js ; cd ../../.."
   },
   "dependencies": {
     "vertx3-full": "3.1.0"

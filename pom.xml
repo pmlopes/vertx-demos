@@ -23,7 +23,7 @@
     <module>data-storage-service</module>
     <module>data-storage-client</module>
     <module>map-render-service</module>
-
+    <module>frontend</module>
     <module>map-server</module>
     <module>eventbus-to-hawkular-bridge</module>
   </modules>

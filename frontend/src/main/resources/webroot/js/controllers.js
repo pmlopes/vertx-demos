@@ -29,7 +29,7 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   // connect to the event bus
   eventBus.open(function () {
     // request the resource from the server
-    $http.get('http://localhost:8080/places.json').success(function (data) {
+    $http.get('http://localhost:8080/places').success(function (data) {
       // load recommendations
       data.forEach(function (el) {
         $scope.pois.push(el);
@@ -63,13 +63,13 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   // declare helpers
   $scope.showInMap = function (poi) {
     if (marker) {
-      marker.setLatLng([poi.lat, poi.lon]);
+      marker.setLatLng([poi.latitude, poi.longitude]);
     } else {
-      marker = L.marker([poi.lat, poi.lon]).addTo(map);
+      marker = L.marker([poi.latitude, poi.longitude]).addTo(map);
     }
 
-    marker.bindPopup("<b>" + poi.companyName + "</b><br />" + poi.addressDisplay).openPopup();
-    map.setView([poi.lat, poi.lon], 16);
+    marker.bindPopup("<b>" + poi.name + "</b><br />" + poi.address).openPopup();
+    map.setView([poi.latitude, poi.longitude], 16);
   };
 
   $scope.thumbs = function (poi, up) {
