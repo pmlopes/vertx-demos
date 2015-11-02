@@ -22,6 +22,7 @@
     <module>data-provisioning</module>
     <module>data-storage-service</module>
     <module>data-storage-client</module>
+    <module>recommendation-service</module>
     <module>map-render-service</module>
     <module>frontend</module>
     <module>map-server</module>

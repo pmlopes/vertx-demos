@@ -1,4 +1,4 @@
 {
   "db_name" : "places",
-  "connection_string": "mongodb://192.168.99.100:27017"
+  "connection_string": "mongodb://localhost:27017"
 }
