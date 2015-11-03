@@ -23,7 +23,6 @@ public class RecommendationServiceImpl implements RecommendationService {
   @Override
   public void vote(String name, boolean plus, Handler<AsyncResult<JsonObject>> handler) {
     redis.hincrby(name, plus ? "up" : "down", 1, hincrby -> {
-      System.out.println("Vote written");
       // TO IMPLEMENT
       if (hincrby.failed()) {
         handler.handle(Future.failedFuture(hincrby.cause()));
@@ -54,7 +53,6 @@ public class RecommendationServiceImpl implements RecommendationService {
         if (result == null) {
           result = new JsonObject();
         }
-        System.out.println("Retrieving votes: " + name + " / " + result);
         handler.handle(Future.succeededFuture(result.put("name", name)));
       }
     });
