@@ -63,8 +63,13 @@ public class MapServerVerticle extends AbstractVerticle {
                 .end();
 
           } else {
+            System.out.println("Calling " + "http://map0render0service-vertxdemos.rhcloud.com/render/" + x + "/" +
+                y + "/" + z);
+
+
             vertx.createHttpClient().getNow(80, "map0render0service-vertxdemos.rhcloud.com",
-                "/render/" + x + "/y/" + z, response -> {
+//            vertx.createHttpClient().getNow(8001, "localhost",
+                "/render/" + x + "/" + y + "/" + z, response -> {
                   if (response.statusCode() == 200) {
                     response.bodyHandler(buffer -> {
                           req.response()
@@ -74,6 +79,7 @@ public class MapServerVerticle extends AbstractVerticle {
                         }
                     );
                   } else {
+                    System.out.println("Got " + response.statusMessage());
                     req.response().setStatusCode(500).end("Cannot retrieve map tile");
                   }
                 });
