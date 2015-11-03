@@ -44,6 +44,7 @@ public class WebMapRenderVerticle extends AbstractVerticle {
           int x = Integer.parseInt(context.request().getParam("x"));
           int y = Integer.parseInt(context.request().getParam("y"));
           int z = Integer.parseInt(context.request().getParam("z"));
+          System.out.println("Requested tile: x=" + x + ", y=" + y + ", z=" + z);
 
           final ByteArrayOutputStream out = new ByteArrayOutputStream(32 * 1024);
           try {
@@ -56,6 +57,6 @@ public class WebMapRenderVerticle extends AbstractVerticle {
     );
 
     vertx.createHttpServer().requestHandler(router::accept).listen(
-        Integer.getInteger("http.port", 8080), System.getProperty("http.address", "localhost"));
+        Integer.getInteger("http.port", 8001), System.getProperty("http.address", "localhost"));
   }
 }
