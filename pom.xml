@@ -24,8 +24,8 @@
     <module>data-storage-client</module>
     <module>recommendation-service</module>
     <module>map-render-service</module>
+    <module>map-server-proxy</module>
     <module>frontend</module>
-    <module>map-server</module>
     <module>recommendation-service</module>
     <module>eventbus-to-hawkular-bridge</module>
   </modules>

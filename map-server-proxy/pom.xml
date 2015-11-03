@@ -11,7 +11,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>map-server</artifactId>
+  <artifactId>map-server-proxy</artifactId>
 
   <properties>
     <main.verticle>io.vertx.devoxx.map.server.MapServerVerticle</main.verticle>
