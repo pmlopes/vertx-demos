@@ -117,7 +117,8 @@
                   <assembly>
                     <mode>dir</mode>
                     <basedir>/opt/vertx</basedir>
-                    <descriptor>${project.parent.basedir}/docker-assembly/assembly.xml</descriptor>
+                    <!-- Look insrc/main/docker -->
+                    <descriptor>assembly.xml</descriptor>
                   </assembly>
                 </build>
               </image>
