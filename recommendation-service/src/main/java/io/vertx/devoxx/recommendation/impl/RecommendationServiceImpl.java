@@ -7,6 +7,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.devoxx.recommendation.RecommendationService;
 import io.vertx.redis.RedisClient;
+import io.vertx.redis.RedisOptions;
 
 /**
  * @author <a href="mailto:plopes@redhat.com">Paulo Lopes</a>
@@ -16,12 +17,14 @@ public class RecommendationServiceImpl implements RecommendationService {
   private final RedisClient redis;
 
   public RecommendationServiceImpl(Vertx vertx, JsonObject config) {
-    this.redis = RedisClient.create(vertx, config);
+    this.redis = RedisClient.create(vertx, new RedisOptions(config));
   }
 
   @Override
   public void vote(String name, boolean plus, Handler<AsyncResult<JsonObject>> handler) {
     redis.hincrby(name, plus ? "up" : "down", 1, hincrby -> {
+      System.out.println("Vote written");
+      // TO IMPLEMENT
       if (hincrby.failed()) {
         handler.handle(Future.failedFuture(hincrby.cause()));
       } else {
@@ -43,6 +46,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   @Override
   public void get(String name, Handler<AsyncResult<JsonObject>> handler) {
     redis.hgetall(name, hgetall -> {
+      // TO IMPLEMENT
       if (hgetall.failed()) {
         handler.handle(Future.failedFuture(hgetall.cause()));
       } else {
@@ -50,6 +54,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         if (result == null) {
           result = new JsonObject();
         }
+        System.out.println("Retrieving votes: " + name + " / " + result);
         handler.handle(Future.succeededFuture(result.put("name", name)));
       }
     });

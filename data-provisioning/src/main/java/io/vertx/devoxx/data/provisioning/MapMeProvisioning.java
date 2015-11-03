@@ -32,6 +32,9 @@ public class MapMeProvisioning extends AbstractVerticle {
     //URL for devoxx.
     client.getNow(80, "mapme.com", "/api/map/910f1efe-d403-481e-a87e-bd8c9df7a131/places", response ->
         response.bodyHandler(body -> {
+          /**
+           * To be implemented (2 lines)
+           */
               JsonObject json = new JsonObject(body.toString("UTF-8"));
               extractPlaces(json, this::populateDatabase);
             }

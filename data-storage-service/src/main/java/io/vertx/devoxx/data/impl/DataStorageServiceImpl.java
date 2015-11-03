@@ -26,6 +26,9 @@ public class DataStorageServiceImpl implements DataStorageService {
 
   @Override
   public void getAllPlaces(Handler<AsyncResult<List<Place>>> resultHandler) {
+    /**
+     * To be implemented.
+     */
     mongo.find(COLLECTION, new JsonObject(), ar -> {
       if (ar.failed()) {
         resultHandler.handle(Future.failedFuture(ar.cause()));
@@ -50,6 +53,9 @@ public class DataStorageServiceImpl implements DataStorageService {
 
   @Override
   public void getPlacesForTag(String tag, Handler<AsyncResult<List<Place>>> resultHandler) {
+    /**
+     * To be implemented.
+     */
     mongo.find(COLLECTION, new JsonObject().put("tags", tag), ar -> {
       if (ar.failed()) {
         resultHandler.handle(Future.failedFuture(ar.cause()));
@@ -62,6 +68,9 @@ public class DataStorageServiceImpl implements DataStorageService {
 
   @Override
   public void addPlace(Place place, Handler<AsyncResult<Void>> resultHandler) {
+    /**
+     * To be implemented.
+     */
     mongo.insert(COLLECTION, place.toJson(), s -> {
       if (s.failed()) {
         resultHandler.handle(Future.failedFuture(s.cause()));
