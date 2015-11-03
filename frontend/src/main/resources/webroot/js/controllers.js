@@ -9,7 +9,9 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   var map = L.map('map').setView([51.21796, 4.42079], 13);
   var marker;
 
-  L.tileLayer('http://localhost:8000/{z}/{x}/{y}.png', {
+  // Change here if you are using the docker-machine: http:////192.168.99.100:8000/{z}/{x}/{y}.png
+  // Change here if you are using localhost: http://localhost:8000/{z}/{x}/{y}.png
+  L.tileLayer('http:////localhost:8000/{z}/{x}/{y}.png', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
   }).addTo(map);
