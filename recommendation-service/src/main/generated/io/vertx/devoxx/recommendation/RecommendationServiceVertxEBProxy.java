@@ -56,7 +56,7 @@ public class RecommendationServiceVertxEBProxy implements RecommendationService 
     this._options = options;
   }
 
-  public void vote(String name, boolean plus, Handler<AsyncResult<JsonObject>> resultHandler) {
+  public void vote(String name, boolean plus, Handler<AsyncResult<Void>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return;
@@ -66,7 +66,7 @@ public class RecommendationServiceVertxEBProxy implements RecommendationService 
     _json.put("plus", plus);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "vote");
-    _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
+    _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {

@@ -24,7 +24,8 @@ import io.vertx.groovy.core.Vertx
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 /**
- * @author <a href="http://escoffier.me">Clement Escoffier</a>
+ * Service exposed on the event bus to provide access to
+ * the stored Places.
 */
 @CompileStatic
 public class DataStorageService {

@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-app.controller('POIListController', function ($scope, $http, eventBus) {
+app.controller('POIListController', function ($scope, $http) {
 
 
   // place map in antwerpen center
@@ -16,6 +16,9 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
   }).addTo(map);
 
+  // bridge directly to the recommendation service
+  var eb = new EventBus(window.location.protocol + '//' + window.location.host + '/eventbus');
+  var recommendation = new RecommendationService(eb, 'devoxx.recommendations');
 
   //L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
   //  maxZoom: 18,
@@ -29,14 +32,27 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   $scope.pois = [];
 
   // connect to the event bus
-  eventBus.open(function () {
+  eb.onopen = function () {
     // request the resource from the server
     $http.get('http://localhost:8080/places').success(function (data) {
       // load recommendations
       data.forEach(function (el) {
         $scope.pois.push(el);
-        eventBus.send('poi.recommendation.load', {name: el.name}, {}, function (err, msg) {
+
+        recommendation.get(el.name, function (err, res) {
           if (!err) {
+            $scope.$apply(function () {
+              el.thumbsUp = res.up || el.thumbsUp;
+              el.thumbsDown = res.down || el.thumbsDown;
+              el.thumbs = (el.thumbsUp || 0) - (el.thumbsDown || 0);
+            });
+          }
+        });
+      });
+
+      eb.registerHandler('devoxx.recommendations.announce',function (err, msg) {
+        if (!err) {
+          $scope.$apply(function () {
             $scope.pois.filter(function (val) {
               return val.name === msg.body.name;
             }).forEach(function (el) {
@@ -44,23 +60,11 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
               el.thumbsDown = msg.body.down || el.thumbsDown;
               el.thumbs = (el.thumbsUp || 0) - (el.thumbsDown || 0);
             });
-          }
-        });
-      });
-
-      eventBus.registerHandler('poi.recommendation', {}, function (err, msg) {
-        if (!err) {
-          $scope.pois.filter(function (val) {
-            return val.name === msg.body.name;
-          }).forEach(function (el) {
-            el.thumbsUp = msg.body.up || el.thumbsUp;
-            el.thumbsDown = msg.body.down || el.thumbsDown;
-            el.thumbs = (el.thumbsUp || 0) - (el.thumbsDown || 0);
           });
         }
       });
     });
-  });
+  };
 
   // declare helpers
   $scope.showInMap = function (poi) {
@@ -75,6 +79,10 @@ app.controller('POIListController', function ($scope, $http, eventBus) {
   };
 
   $scope.thumbs = function (poi, up) {
-    eventBus.send('poi.recommendation.vote', {name: poi.name, thumbs: up});
+    recommendation.vote(poi.name, up, function (err) {
+      if (err) {
+        console.error(err);
+      }
+    });
   };
 });

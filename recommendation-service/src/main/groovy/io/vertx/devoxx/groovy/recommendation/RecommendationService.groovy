@@ -38,18 +38,8 @@ public class RecommendationService {
     def ret= InternalHelper.safeCreate(io.vertx.devoxx.recommendation.RecommendationService.createProxy((io.vertx.core.Vertx)vertx.getDelegate(), address), io.vertx.devoxx.groovy.recommendation.RecommendationService.class);
     return ret;
   }
-  public void vote(String name, boolean plus, Handler<AsyncResult<Map<String, Object>>> resultHandler) {
-    this.delegate.vote(name, plus, new Handler<AsyncResult<io.vertx.core.json.JsonObject>>() {
-      public void handle(AsyncResult<io.vertx.core.json.JsonObject> event) {
-        AsyncResult<Map<String, Object>> f
-        if (event.succeeded()) {
-          f = InternalHelper.<Map<String, Object>>result((Map<String, Object>)InternalHelper.wrapObject(event.result()))
-        } else {
-          f = InternalHelper.<Map<String, Object>>failure(event.cause())
-        }
-        resultHandler.handle(f)
-      }
-    });
+  public void vote(String name, boolean plus, Handler<AsyncResult<Void>> resultHandler) {
+    this.delegate.vote(name, plus, resultHandler);
   }
   public void get(String name, Handler<AsyncResult<Map<String, Object>>> resultHandler) {
     this.delegate.get(name, new Handler<AsyncResult<io.vertx.core.json.JsonObject>>() {

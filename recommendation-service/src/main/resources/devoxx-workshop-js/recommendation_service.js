@@ -43,7 +43,7 @@ var RecommendationService = function(j_val) {
     if (__args.length === 3 && typeof __args[0] === 'string' && typeof __args[1] ==='boolean' && typeof __args[2] === 'function') {
       j_recommendationService["vote(java.lang.String,boolean,io.vertx.core.Handler)"](name, plus, function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnJson(ar.result()), null);
+        resultHandler(null, null);
       } else {
         resultHandler(null, ar.cause());
       }

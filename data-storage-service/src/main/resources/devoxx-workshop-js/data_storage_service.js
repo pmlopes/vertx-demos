@@ -24,6 +24,8 @@ var JDataStorageService = io.vertx.devoxx.data.DataStorageService;
 var Place = io.vertx.devoxx.data.Place;
 
 /**
+ Service exposed on the event bus to provide access to
+ the stored Places.
 
  @class
 */

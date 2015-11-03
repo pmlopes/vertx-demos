@@ -19,7 +19,7 @@ public interface RecommendationService {
     return ProxyHelper.createProxy(RecommendationService.class, vertx, address);
   }
 
-  void vote(String name, boolean plus, Handler<AsyncResult<JsonObject>> resultHandler);
+  void vote(String name, boolean plus, Handler<AsyncResult<Void>> resultHandler);
 
   void get(String name, Handler<AsyncResult<JsonObject>> resultHandler);
 }

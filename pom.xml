@@ -26,7 +26,6 @@
     <module>map-render-service</module>
     <module>map-server-proxy</module>
     <module>frontend</module>
-    <module>recommendation-service</module>
     <module>eventbus-to-hawkular-bridge</module>
   </modules>
 

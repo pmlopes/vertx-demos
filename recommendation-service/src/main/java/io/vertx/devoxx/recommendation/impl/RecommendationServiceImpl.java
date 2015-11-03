@@ -4,6 +4,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.devoxx.recommendation.RecommendationService;
 import io.vertx.redis.RedisClient;
@@ -15,13 +16,15 @@ import io.vertx.redis.RedisOptions;
 public class RecommendationServiceImpl implements RecommendationService {
 
   private final RedisClient redis;
+  private final EventBus eb;
 
   public RecommendationServiceImpl(Vertx vertx, JsonObject config) {
+    this.eb = vertx.eventBus();
     this.redis = RedisClient.create(vertx, new RedisOptions(config));
   }
 
   @Override
-  public void vote(String name, boolean plus, Handler<AsyncResult<JsonObject>> handler) {
+  public void vote(String name, boolean plus, Handler<AsyncResult<Void>> handler) {
     redis.hincrby(name, plus ? "up" : "down", 1, hincrby -> {
       // TO IMPLEMENT
       if (hincrby.failed()) {
@@ -35,7 +38,11 @@ public class RecommendationServiceImpl implements RecommendationService {
             if (result == null) {
               result = new JsonObject();
             }
-            handler.handle(Future.succeededFuture(result.put("name", name)));
+
+            handler.handle(Future.succeededFuture());
+
+            // we broadcast the update so everyone can know about it
+            eb.publish("devoxx.recommendations.announce", result.put("name", name));
           }
         });
       }
