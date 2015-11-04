@@ -6,6 +6,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
+import io.vertx.core.json.JsonObject;
 import org.hawkular.metrics.client.common.Batcher;
 import org.hawkular.metrics.client.common.MetricType;
 import org.hawkular.metrics.client.common.SingleMetric;
@@ -41,11 +42,12 @@ public class HawkularBridge extends AbstractVerticle {
         .setDefaultPort(config().getInteger("hawkular.port", 8090))
         .setDefaultHost(config().getString("hawkular.host", "192.168.99.100")));
 
-    Random random = new Random();
-    vertx.setPeriodic(1000, l -> {
-      SingleMetric metric = new SingleMetric("my.gauge", System.currentTimeMillis(), random.nextDouble() * 100,
-          MetricType.COUNTER);
-      send(Collections.singletonList(metric));
+    vertx.eventBus().consumer("metrics", msg -> {
+      JsonObject json = (JsonObject) msg.body();
+      String source = json.getString("source");
+      double value = json.getDouble("value");
+      SingleMetric simple = new SingleMetric(source, System.currentTimeMillis(), value);
+      send(Collections.singletonList(simple));
     });
   }
 
